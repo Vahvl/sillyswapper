@@ -2,13 +2,13 @@
   {
     "modid": "${id}",
     "name": "${name}",
-    "description": "",
+    "description": "Etherwarp merger is pain.",
     "version": "${version}",
     "mcversion": "${mcVersionStr}",
     "url": "",
     "updateUrl": "",
     "authorList": [
-      "Your Name"
+      "Vahvl"
     ],
     "credits": "",
     "logoFile": "",

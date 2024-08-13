@@ -12,8 +12,8 @@ import silly.yet.swapping.config.SillyConfig;
 
 public class SillySwapping {
 
-    private static final long MIN_DELAY_MS = 10;  // Minimum delay in milliseconds
-    private static final long MAX_DELAY_MS = 30;  // Maximum delay in milliseconds
+    //private static final long MIN_DELAY_MS = 10;  // Minimum delay in milliseconds
+    //private static final long MAX_DELAY_MS = 30;  // Maximum delay in milliseconds
     private int originalSlot = -1; // Store the original slot
     private int targetSlot = -1; // Store the slot with Etherwarp Conduit
     private boolean wasSneaking = false;
@@ -23,30 +23,39 @@ public class SillySwapping {
     public void onTick(TickEvent.PlayerTickEvent event) {
         if (!SillyConfig.sillySwapper) return;
         EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
+        if (player == null) return;
         ItemStack heldItem = player.inventory.getCurrentItem();
         if (!player.worldObj.isRemote) return;
 
-        boolean isSneaking = player.isSneaking();
-        if (isSneaking == wasSneaking) return;
-        wasSneaking = isSneaking;
+        boolean keyHeld = SillyConfig.sillyBind.isActive();
+        if (keyHeld == wasSneaking) return;
+        wasSneaking = keyHeld;
 
         int currentSlot = player.inventory.currentItem;
-        if (isSneaking) {
-            if (heldItem != null && heldItem.getDisplayName().contains("Aspect Of The Void")) {
+        if (keyHeld) {
+            if (SillyConfig.AOTVMode && heldItem != null && heldItem.getDisplayName().contains("Aspect Of The Void")) {
+                if (Minecraft.getMinecraft().currentScreen != null) return;
                 targetSlot = findHotbarSlotWithItem(player, "Etherwarp Conduit");
                 if (targetSlot == -1) return;
                 originalSlot = currentSlot;
                 player.inventory.currentItem = targetSlot;
                 active = true;
                 player.sendQueue.addToSendQueue(new C09PacketHeldItemChange(targetSlot));
-
+            } else if (!SillyConfig.AOTVMode){
+                if (Minecraft.getMinecraft().currentScreen != null) return;
+                targetSlot = findHotbarSlotWithItem(player, "Etherwarp Conduit");
+                if (targetSlot == -1) return;
+                originalSlot = currentSlot;
+                player.inventory.currentItem = targetSlot;
+                active = true;
+                player.sendQueue.addToSendQueue(new C09PacketHeldItemChange(targetSlot));
             }
         } else {
             boolean toggle = active;
             active = false;
             if (toggle && heldItem.getDisplayName().contains("Etherwarp Conduit")) {
-            player.inventory.currentItem = originalSlot;
-            player.sendQueue.addToSendQueue(new C09PacketHeldItemChange(originalSlot));
+                player.inventory.currentItem = originalSlot;
+                player.sendQueue.addToSendQueue(new C09PacketHeldItemChange(originalSlot));
             }
         }
     }
