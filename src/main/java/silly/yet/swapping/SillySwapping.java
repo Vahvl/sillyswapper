@@ -31,15 +31,7 @@ public class SillySwapping {
 
         int currentSlot = player.inventory.currentItem;
         if (keyHeld) {
-            if (SillyConfig.AOTVMode && heldItem != null && heldItem.getDisplayName().contains("Aspect of the Void")) {
-                if (Minecraft.getMinecraft().currentScreen != null) return;
-                targetSlot = findHotbarSlotWithItem(player, "Etherwarp Conduit");
-                if (targetSlot == -1) return;
-                originalSlot = currentSlot;
-                player.inventory.currentItem = targetSlot;
-                active = true;
-                Minecraft.getMinecraft().thePlayer.inventory.currentItem = targetSlot;
-            } else if (!SillyConfig.AOTVMode) {
+            if (!SillyConfig.AOTVMode || heldItem != null && heldItem.getDisplayName().contains("Aspect of the Void")) {
                 if (Minecraft.getMinecraft().currentScreen != null) return;
                 targetSlot = findHotbarSlotWithItem(player, "Etherwarp Conduit");
                 if (targetSlot == -1) return;
@@ -49,12 +41,11 @@ public class SillySwapping {
                 Minecraft.getMinecraft().thePlayer.inventory.currentItem = targetSlot;
             }
         } else {
-            boolean toggle = active;
-            active = false;
-            if (heldItem != null && toggle && heldItem.getDisplayName().contains("Etherwarp Conduit")) {
+            if (heldItem != null && active && heldItem.getDisplayName().contains("Etherwarp Conduit")) {
                 player.inventory.currentItem = originalSlot;
                 Minecraft.getMinecraft().thePlayer.inventory.currentItem = originalSlot;
             }
+            active = false;
         }
     }
 

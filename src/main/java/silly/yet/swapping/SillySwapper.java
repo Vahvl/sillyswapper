@@ -18,7 +18,7 @@ public class SillySwapper {
     // Sets the variables from `gradle.properties`. See the `blossom` config in `build.gradle.kts`.
     public static final String MODID = "sillyswapper";
     public static final String NAME = "SillySwapper";
-    public static final String VERSION = "1.0";
+    public static final String VERSION = "1.1";
     @Mod.Instance(MODID)
     public static SillySwapper INSTANCE; // Adds the instance of the mod, so we can access other variables.
     public static SillyConfig config;
