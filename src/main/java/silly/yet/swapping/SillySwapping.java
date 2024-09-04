@@ -38,12 +38,10 @@ public class SillySwapping {
                 originalSlot = currentSlot;
                 player.inventory.currentItem = targetSlot;
                 active = true;
-                Minecraft.getMinecraft().thePlayer.inventory.currentItem = targetSlot;
             }
         } else {
             if (heldItem != null && active && heldItem.getDisplayName().contains("Etherwarp Conduit")) {
                 player.inventory.currentItem = originalSlot;
-                Minecraft.getMinecraft().thePlayer.inventory.currentItem = originalSlot;
             }
             active = false;
         }
