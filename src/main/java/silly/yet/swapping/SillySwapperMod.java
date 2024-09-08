@@ -12,15 +12,15 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
  * @see Mod
  * @see InitializationEvent
  */
-@Mod(modid = SillySwapper.MODID, name = SillySwapper.NAME, version = SillySwapper.VERSION)
-public class SillySwapper {
+@Mod(modid = SillySwapperMod.MODID, name = SillySwapperMod.NAME, version = SillySwapperMod.VERSION)
+public class SillySwapperMod {
 
     // Sets the variables from `gradle.properties`. See the `blossom` config in `build.gradle.kts`.
     public static final String MODID = "sillyswapper";
     public static final String NAME = "SillySwapper";
     public static final String VERSION = "1.1";
     @Mod.Instance(MODID)
-    public static SillySwapper INSTANCE; // Adds the instance of the mod, so we can access other variables.
+    public static SillySwapperMod INSTANCE; // Adds the instance of the mod, so we can access other variables.
     public static SillyConfig config;
 
     // Register the config and commands.

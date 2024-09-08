@@ -1,59 +1,58 @@
-package silly.yet.swapping;
+package silly.yet.swapping
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import silly.yet.swapping.config.SillyConfig;
+import net.minecraft.client.Minecraft
+import net.minecraft.entity.player.EntityPlayer
+import net.minecraftforge.fml.common.eventhandler.EventPriority
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
+import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent
+import silly.yet.swapping.config.SillyConfig
 
-public class SillySwapping {
+class SillySwapping {
 
-    private int originalSlot = -1; // Store the original slot
-    private int targetSlot = -1; // Store the slot with Etherwarp Conduit
-    private boolean keyHeld = false;
-    private boolean active = false;
+    private var originalSlot = 1
+    private var keyHeld = false
+    private var active = false
 
+    private val mc get() = Minecraft.getMinecraft()
 
     @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
-    public void onTick(TickEvent.PlayerTickEvent event) {
-        if (!SillyConfig.sillySwapper) return;
-        EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
-        if (player == null) return;
-        ItemStack heldItem = player.inventory.getCurrentItem();
-        if (!player.worldObj.isRemote) return;
+    fun onTick(event: PlayerTickEvent) {
+        if (!SillyConfig.sillySwapper) return
 
-        boolean keyHeld = SillyConfig.sillyBind.isActive();
-        if (keyHeld == this.keyHeld) return;
-        this.keyHeld = keyHeld;
+        val player = mc.thePlayer ?: return
 
-        int currentSlot = player.inventory.currentItem;
-        if (keyHeld) {
-            if (!SillyConfig.AOTVMode || heldItem != null && heldItem.getDisplayName().contains("Aspect of the Void")) {
-                if (Minecraft.getMinecraft().currentScreen != null) return;
-                targetSlot = findHotbarSlotWithItem(player, "Etherwarp Conduit");
-                if (targetSlot == -1) return;
-                originalSlot = currentSlot;
-                player.inventory.currentItem = targetSlot;
-                active = true;
+        val heldItem = player.inventory.getCurrentItem()
+        if (!player.worldObj.isRemote) return
+
+        val isActive = SillyConfig.sillyBind.isActive
+        if (isActive == keyHeld) return
+        keyHeld = isActive
+
+        val currentSlot = player.inventory.currentItem
+        if (isActive) {
+            if (!SillyConfig.AOTVMode || heldItem != null && heldItem.displayName.contains("Aspect of the Void")) {
+                val targetSlot = findHotbarSlotWithItem(player, "Etherwarp Conduit") ?: return
+
+                originalSlot = currentSlot
+                player.inventory.currentItem = targetSlot
+                active = true
             }
         } else {
-            if (heldItem != null && active && heldItem.getDisplayName().contains("Etherwarp Conduit")) {
-                player.inventory.currentItem = originalSlot;
+            if (heldItem != null && active && heldItem.displayName.contains("Etherwarp Conduit")) {
+                player.inventory.currentItem = originalSlot
             }
-            active = false;
+            active = false
         }
     }
 
-    private int findHotbarSlotWithItem(EntityPlayer player, String itemName) {
-        for (int i = 0; i < 9; i++) {
-            ItemStack stack = player.inventory.getStackInSlot(i);
-            if (stack != null && stack.hasDisplayName() && stack.getDisplayName().contains(itemName)) {
-                return i;
+    private fun findHotbarSlotWithItem(player: EntityPlayer, itemName: String): Int? {
+        for (i in 0..8) {
+            val stack = player.inventory.getStackInSlot(i) ?: continue
+            if (stack.hasDisplayName() && stack.displayName.contains(itemName)) {
+                return i
             }
         }
-        return -1;
+        return null
     }
+    
 }

@@ -3,11 +3,11 @@ package silly.yet.swapping.config;
 import cc.polyfrost.oneconfig.config.annotations.*;
 import cc.polyfrost.oneconfig.config.core.OneKeyBind;
 import cc.polyfrost.oneconfig.libs.universal.UKeyboard;
-import silly.yet.swapping.SillySwapper;
 import cc.polyfrost.oneconfig.config.Config;
 import cc.polyfrost.oneconfig.config.data.Mod;
 import cc.polyfrost.oneconfig.config.data.ModType;
 import cc.polyfrost.oneconfig.config.data.OptionSize;
+import silly.yet.swapping.SillySwapperMod;
 
 /**
  * The main Config entrypoint that extends the Config type and inits the config options.
@@ -34,7 +34,7 @@ public class SillyConfig extends Config {
     public static OneKeyBind sillyBind = new OneKeyBind(UKeyboard.KEY_DELETE);
 
     public SillyConfig() {
-        super(new Mod(SillySwapper.NAME, ModType.SKYBLOCK), SillySwapper.MODID + ".json");
+        super(new Mod(SillySwapperMod.NAME, ModType.SKYBLOCK), SillySwapperMod.MODID + ".json");
         initialize();
     }
 }
