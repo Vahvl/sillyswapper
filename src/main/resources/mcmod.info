@@ -5,10 +5,10 @@
     "description": "Etherwarp merger is pain.",
     "version": "${version}",
     "mcversion": "${mcVersionStr}",
-    "url": "",
+    "url": "https://bigrat.monster",
     "updateUrl": "",
     "authorList": [
-      "Vahvl"
+      "Vahvl, Empa_"
     ],
     "credits": "",
     "logoFile": "",

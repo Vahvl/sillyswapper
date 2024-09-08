@@ -22,7 +22,6 @@ class SillySwapping {
         val player = mc.thePlayer ?: return
 
         val heldItem = player.inventory.getCurrentItem()
-        if (!player.worldObj.isRemote) return
 
         val isActive = SillyConfig.sillyBind.isActive
         if (isActive == keyHeld) return
@@ -34,12 +33,12 @@ class SillySwapping {
                 val targetSlot = findHotbarSlotWithItem(player, "Etherwarp Conduit") ?: return
 
                 originalSlot = currentSlot
-                player.inventory.currentItem = targetSlot
+                setSlot(targetSlot, player)
                 active = true
             }
         } else {
             if (heldItem != null && active && heldItem.displayName.contains("Etherwarp Conduit")) {
-                player.inventory.currentItem = originalSlot
+                setSlot(originalSlot, player)
             }
             active = false
         }
@@ -53,6 +52,12 @@ class SillySwapping {
             }
         }
         return null
+    }
+
+    private fun setSlot(slot: Int, player: EntityPlayer) {
+        if (slot in 0..8) {
+            player.inventory.currentItem = slot
+        }
     }
     
 }
