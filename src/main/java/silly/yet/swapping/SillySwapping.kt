@@ -2,7 +2,6 @@ package silly.yet.swapping
 
 import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraftforge.fml.common.eventhandler.EventPriority
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent
 import silly.yet.swapping.config.SillyConfig
@@ -15,7 +14,7 @@ class SillySwapping {
 
     private val mc get() = Minecraft.getMinecraft()
 
-    @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
+    @SubscribeEvent
     fun onTick(event: PlayerTickEvent) {
         if (!SillyConfig.sillySwapper) return
 
@@ -30,23 +29,23 @@ class SillySwapping {
         val currentSlot = player.inventory.currentItem
         if (isActive) {
             if (!SillyConfig.AOTVMode || heldItem != null && heldItem.displayName.contains("Aspect of the Void")) {
-                val targetSlot = findHotbarSlotWithItem(player, "Etherwarp Conduit") ?: return
+                val targetSlot = player.findHotbarSlotWithItem("Etherwarp Conduit") ?: return
 
                 originalSlot = currentSlot
-                setSlot(targetSlot, player)
+                player.setSlot(targetSlot)
                 active = true
             }
         } else {
             if (heldItem != null && active && heldItem.displayName.contains("Etherwarp Conduit")) {
-                setSlot(originalSlot, player)
+                player.setSlot(originalSlot)
             }
             active = false
         }
     }
 
-    private fun findHotbarSlotWithItem(player: EntityPlayer, itemName: String): Int? {
+    private fun EntityPlayer.findHotbarSlotWithItem(itemName: String): Int? {
         for (i in 0..8) {
-            val stack = player.inventory.getStackInSlot(i) ?: continue
+            val stack = inventory.getStackInSlot(i) ?: continue
             if (stack.hasDisplayName() && stack.displayName.contains(itemName)) {
                 return i
             }
@@ -54,10 +53,8 @@ class SillySwapping {
         return null
     }
 
-    private fun setSlot(slot: Int, player: EntityPlayer) {
-        if (slot in 0..8) {
-            player.inventory.currentItem = slot
-        }
+    private fun EntityPlayer.setSlot(slot: Int) {
+        if (slot in 0..8) inventory.currentItem = slot
     }
     
 }
