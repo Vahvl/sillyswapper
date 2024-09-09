@@ -19,6 +19,7 @@ class SillySwapping {
         if (!SillyConfig.sillySwapper) return
 
         val player = mc.thePlayer ?: return
+        if (mc.currentScreen == null) return
 
         val heldItem = player.inventory.getCurrentItem()
 
